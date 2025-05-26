@@ -64,7 +64,7 @@ margin-top: 20px;
 <div class="search-bar">
 <label for="Address">Location:</label><br>
 <input type="text" id="searchInp" name="searchInp" class="form-control mb-2" placeholder="Enter your city or address">
-<button class="btn btn-primary" onclick="handleSearch()">Search</button>
+<button class="btn btn-primary" onclick="search()">Search</button>
 </div>
 </div>
 <div id="result"></div>
@@ -80,6 +80,10 @@ document.addEventListener("DOMContentLoaded", function() { GetMap();});
 
 datasource = new atlas.source.DataSource();
 map.sources.add(datasource);
+popup = new atlas.Popup();
+resultPanel = document.getElementById("result");
+searchInput = document.getElementById(searchInp)
+searchInput.addEventListener("keyup", searchInputKeyup)
 
 function handleSearch() {
 const query = document.getElementById("searchInp").value.trim();
@@ -120,7 +124,7 @@ function search() {
             var pipeline = atlas.service.MapsURL.newPipeline(new atlas.service.MapControlCredential(map));
             var searchURL = new atlas.service.SearchURL(pipeline);
 
-            var query = document.getElementById("search-input").value;
+            var query = document.getElementById("searchInp").value;
             searchURL.searchPOI(atlas.service.Aborter.timeout(10000), query, {
                 lon: map.getCamera().center[0],
                 lat: map.getCamera().center[1],
